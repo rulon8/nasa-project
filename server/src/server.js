@@ -8,6 +8,7 @@ const PORT = process.env.PORT || 8000;
 const server = http.createServer(app);
 
 async function startServer() {
+  // Wait for planet data to load from CSV file.
   await loadPlanetsData();
 
   server.listen(PORT, () => {

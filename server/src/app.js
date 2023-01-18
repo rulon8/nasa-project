@@ -8,13 +8,14 @@ const launchesRouter = require('./routes/launches/launches.router');
 
 const app = express();
 
+//Allow cors requests from React app.
 app.use(cors({
   origin: 'http://localhost:3000',
 }));
 
-app.use(morgan('combined'));
-app.use(express.json());
-app.use(express.static(path.join(__dirname, '..', 'public')));
+app.use(morgan('combined')); // Logging
+app.use(express.json()); // Accept and return JSON bodies.
+app.use(express.static(path.join(__dirname, '..', 'public'))); // Serve static webpage located at the 'public' folder.
 
 app.use('/planets', planetsRouter);
 app.use('/launches', launchesRouter);
