@@ -19,7 +19,8 @@ app.use(express.static(path.join(__dirname, '..', 'public')));
 app.use('/planets', planetsRouter);
 app.use('/launches', launchesRouter);
 
-app.get('/', (request, response) => {
+// Serve React app from Node.
+app.get('/*', (request, response) => {
   response.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
 });
 
