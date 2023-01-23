@@ -21,8 +21,9 @@ function loadPlanetsData() {
       console.log(err);
       reject(err);
     })
-    .on('end', () => {
-      console.log(`We found ${habitablePlanets.length} habitable planets!`);
+    .on('end', async () => {
+      const habitablePlanetCount = (await getPlanets()).length;
+      console.log(`We found ${habitablePlanetCount} habitable planets!`);
       resolve();
     });
   });
@@ -38,6 +39,10 @@ function isHabitablePlanet(planet) {
   return planet['koi_disposition'] === 'CONFIRMED'
     && planet['koi_insol'] > 0.36 && planet['koi_insol'] < 1.11
     && planet['koi_prad'] < 1.6;
+}
+
+async function getPlanets() {
+  return await planetsModel.find({});
 }
 
 async function savePlanet(planet) {
