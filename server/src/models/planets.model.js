@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const { parse } = require('csv-parse');
 
-const habitablePlanets = [];
+const planetsModel = require('./planets.mongo');
 
 // Load kepler planet data from CSV file and filter out uninhabitable planets.
 function loadPlanetsData() {
@@ -12,9 +12,9 @@ function loadPlanetsData() {
       comment: '#',
       columns: true,
     }))
-    .on('data', (chunk) => {
+    .on('data', async (chunk) => {
       if (isHabitablePlanet(chunk)) {
-        habitablePlanets.push(chunk);
+        await savePlanet(chunk);
       }
     })
     .on('error', (err) => {
@@ -40,8 +40,19 @@ function isHabitablePlanet(planet) {
     && planet['koi_prad'] < 1.6;
 }
 
-function getPlanets() {
-  return habitablePlanets;
+async function savePlanet(planet) {
+  try {
+    await planetsModel.updateOne({
+      keplerName: planet.kepler_name,
+    }, {
+      keplerName: planet.kepler_name,
+    }, {
+      upsert: true,
+    });
+  } catch (err) {
+    console.log(`Could not save planet ${chunk.kepler_name}`);
+    console.log(err);
+  }
 }
 
 module.exports = {
