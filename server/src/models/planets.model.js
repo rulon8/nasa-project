@@ -42,7 +42,10 @@ function isHabitablePlanet(planet) {
 }
 
 async function getPlanets() {
-  return await planetsModel.find({});
+  return await planetsModel.find({}, {
+    '_id': 0,
+    '__v': 0
+  });
 }
 
 async function savePlanet(planet) {
