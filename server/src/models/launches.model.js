@@ -20,8 +20,10 @@ const launch = {
 
 saveLaunch(launch);
 
-function existsLaunchWithId(launchId) {
-  return launches.has(launchId);
+async function existsLaunchWithId(launchId) {
+  return await launchesModel.exists({
+    flightNumber: launchId,
+  });
 }
 
 async function getLatestFlightNumber() {
@@ -50,7 +52,7 @@ async function saveLaunch(launch) {
     throw new Error('No planet was found for launch target.');
   }
 
-  await launchesModel.updateOne({
+  await launchesModel.findOneAndUpdate({
     flightNumber: launch.flightNumber,
   },
   launch,
@@ -77,11 +79,15 @@ async function scheduleLaunch(launch) {
 }
 
 // Mark launch as aborted. Does NOT delete the launch.
-function abortLaunchById(launchId) {
-  const aborted = launches.get(launchId);
-  aborted.upcoming = false;
-  aborted.success = false;
-  return aborted;
+async function abortLaunchById(launchId) {
+  const aborted = await launchesModel.updateOne({
+    flightNumber: launchId,
+  }, {
+    upcoming: false,
+    success: false,
+  });
+
+  return aborted.modifiedCount === 1;
 }
 
 module.exports = {
