@@ -1,6 +1,6 @@
 const { 
   getLaunches,
-  addLaunch,
+  scheduleLaunch,
   existsLaunchWithId,
   abortLaunchById
 } = require('../../models/launches.model');
@@ -9,7 +9,7 @@ async function getAllLaunches(request, response) {
   return response.status(200).json(await getLaunches());
 }
 
-function addNewLaunch(request, response) {
+async function addNewLaunch(request, response) {
   const launch = request.body;
 
   //Check if required values are present.
@@ -28,7 +28,7 @@ function addNewLaunch(request, response) {
     });
   }
 
-  addLaunch(launch);
+  await scheduleLaunch(launch);
   return response.status(201).json(launch);
 }
 
