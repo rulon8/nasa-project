@@ -47,9 +47,12 @@ async function loadLaunchesData() {
     };
   }
 }
+async function findLaunch(filter) {
+  return await launchesModel.findOne(filter);
+}
 
 async function existsLaunchWithId(launchId) {
-  return await launchesModel.exists({
+  return await findLaunch({
     flightNumber: launchId,
   });
 }
