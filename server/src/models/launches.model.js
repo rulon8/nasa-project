@@ -95,14 +95,6 @@ async function getLaunches() {
 }
 
 async function saveLaunch(launch) {
-  const planet = await planetsModel.findOne({
-    keplerName: launch.target,
-  });
-
-  if (!planet) {
-    throw new Error('No planet was found for launch target.');
-  }
-
   await launchesModel.findOneAndUpdate({
     flightNumber: launch.flightNumber,
   },
@@ -118,6 +110,14 @@ async function saveLaunch(launch) {
  * that are not set in the front-end app.
  **/
 async function scheduleLaunch(launch) {
+  const planet = await planetsModel.findOne({
+    keplerName: launch.target,
+  });
+
+  if (!planet) {
+    throw new Error('No planet was found for launch target.');
+  }
+
   const newFlightNumber = (await getLatestFlightNumber()) + 1;
   const newLaunch = Object.assign(launch, {
     flightNumber: newFlightNumber,
