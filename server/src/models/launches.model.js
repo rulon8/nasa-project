@@ -89,11 +89,14 @@ async function getLatestFlightNumber() {
   return latestLaunch.flightNumber;
 }
 
-async function getLaunches() {
+async function getLaunches(skip, limit) {
   return await launchesModel.find({}, {
     '__v': 0,
     '_id': 0,
-  });
+  })
+  .sort('flightNumber')
+  .skip(skip)
+  .limit(limit);
 }
 
 async function saveLaunch(launch) {
