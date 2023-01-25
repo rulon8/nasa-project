@@ -3,8 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
 
-const planetsRouter = require('./routes/planets/planets.router');
-const launchesRouter = require('./routes/launches/launches.router');
+const api = require('./routes/api');
 
 const app = express();
 
@@ -17,8 +16,7 @@ app.use(morgan('combined')); // Logging
 app.use(express.json()); // Accept and return JSON bodies.
 app.use(express.static(path.join(__dirname, '..', 'public'))); // Serve static webpage located at the 'public' folder.
 
-app.use('/planets', planetsRouter);
-app.use('/launches', launchesRouter);
+app.use('/v1', api);
 
 // Serve React app from Node.
 app.get('/*', (request, response) => {
