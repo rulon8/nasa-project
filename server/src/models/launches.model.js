@@ -27,14 +27,14 @@ async function populateLaunches() {
       ],
     },
   });
-  
+
   if (response.status !== 200) {
     console.log('Problem loading SpaceX launch data: ' + response.status);
     throw new Error('SpaceX launch data download failed.');
   }
   
   const launchDocs = response.data.docs;
-  
+
   for (const launchDoc of launchDocs) {
     const payloads = launchDoc['payloads'];
     const customers = payloads.flatMap((payload) => {
@@ -50,6 +50,8 @@ async function populateLaunches() {
       success: launchDoc['success'],
       customers,
     };
+
+    saveLaunch(launchData);
   }
 }
 
